@@ -1,0 +1,10 @@
+In order to run a docker instance of Flipi.Bus follow these steps:
+- Create a network for the cluster
+
+docker network create flipi-kafka-network --driver bridge
+
+- Run ZooKeeper using bitnami docker images
+
+docker run --name zookeeper-server -p 2181:2181 --network flipi-kafka-network -e ALLOW_ANONYMOUS_LOGIN=yes bitnami/zookeeper:latest -d
+
+In my case 2181 was not working so I changed it to 12181:2181
