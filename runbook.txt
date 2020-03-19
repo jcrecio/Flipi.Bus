@@ -1,4 +1,14 @@
-This is what docker compose file is doing:
+Start the swarm
+docker swarm init
+
+The image needs to be pushed into the registry
+docker-compose push
+
+To deploy it in the swarm:
+docker stack deploy --compose-file docker-compose.yml flipi-bus
+
+
+**DOCKER COMPOSE: This is what docker compose file is doing:
 
 In order to run a docker instance of Flipi.Bus follow these steps:
 Create a network for the cluster
