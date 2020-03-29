@@ -5,7 +5,8 @@ The image needs to be pushed into the registry
 docker-compose push
 
 To deploy it in the swarm:
-docker stack deploy --compose-file docker-compose.yml flipi-bus
+docker network create -d overlay --attachable flipi
+- It will create flipi network, cluster for kafka and zookeeper
 
 
 **DOCKER COMPOSE: This is what docker compose file is doing:
