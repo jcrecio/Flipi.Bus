@@ -15,6 +15,11 @@ To deploy it in the swarm:
 docker stack deploy --compose-file docker-compose.yml bus
 
 
+---> We have to create (if does not exist) fetchertopic topic to publish flights
+opt/bitnami/kafka/bin/kafka-topics.sh --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic fetchertopic
+
+
+
 **DOCKER COMPOSE: This is what docker compose file is doing:
 
 In order to run a docker instance of Flipi.Bus follow these steps:
