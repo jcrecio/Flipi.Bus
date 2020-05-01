@@ -1,35 +1,30 @@
-version: '3'
-
+version: '3.2'
 networks:
   overnet:
       external:
           name: overnet
-
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: wurstmeister/zookeeper
     networks:
       - overnet
     ports:
-      - '12181:2181'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      - "2181:2181"
   kafka:
-    image: 'bitnami/kafka:latest'    
+    image: wurstmeister/kafka:latest
     ports:
-      - '9093:9093'
-    expose:
-      - '9092'
-      - '9093'
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
     networks:
       - overnet
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://localhost:9093
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      ALLOW_PLAINTEXT_LISTENER: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-    depends_on:
-      - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
